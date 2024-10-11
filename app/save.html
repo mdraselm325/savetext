@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Share Text/Code</title>
+  <meta name="description" content="A platform for sharing code or text with dynamic real-time updates">
+  <meta name="keywords" content="share, text, code, snippets, pastebin, savetext, text">
+  <meta name="author" content="Team Calyx">
+  <meta property="og:title" content="Share Texts/Codes">
+  <meta property="og:description" content="A platform to share and save text or code snippets">
+  <meta property="og:image" content="https://github.com/SatoX69/Pastebin-Clone">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:description" content="A platform to share and save text or code snippets">
+  <meta name="twitter:image" content="https://github.com/SatoX69/Pastebin-Clone">
+
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f8ff;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    #container {
+      height: 90vh;
+      width: 85vw;
+      max-width: 920px;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    header {
+      background: linear-gradient(270deg, rgba(255, 0, 0, 1), rgba(0, 255, 0, 1), rgba(0, 0, 255, 1));
+      color: white;
+      text-align: center;
+      padding: 10px;
+      border-radius: 10px 10px 0 0;
+      margin: -20px -20px 20px -20px;
+      animation: rgb-lighting 5s infinite alternate;
+    }
+
+    @keyframes rgb-lighting {
+      0% {
+        background-color: rgba(255, 0, 0, 1);
+      }
+      25% {
+        background-color: rgba(0, 255, 0, 1);
+      }
+      50% {
+        background-color: rgba(0, 0, 255, 1);
+      }
+      75% {
+        background-color: rgba(255, 255, 0, 1);
+      }
+      100% {
+        background-color: rgba(0, 255, 255, 1);
+      }
+    }
+
+    textarea {
+      width: calc(100% - 20px);
+      height: 90%;
+      margin: 10px 0;
+      box-sizing: border-box;
+      border: 2px solid #87CEEB;
+      border-radius: 10px;
+      padding: 15px;
+      padding-top: 20px;
+      font-family: inherit;
+      resize: none;
+      outline: none;
+    }
+
+    #copyButton,
+    #rawButton,
+    #newActionButton {
+      position: relative;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 5px;
+      color: #ffffff;
+      border: none;
+      margin-top: 10px;
+      display: inline-block;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    #copyButton {
+      background-color: #4CAF50; /* Green */
+    }
+
+    #rawButton {
+      background-color: #f44336; /* Red */
+    }
+
+    #newActionButton {
+      background-color: #2196F3; /* Blue */
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>Team Calyx Bin</h1>
+    </header>
+    <button id="newActionButton">New Action</button> <!-- New Button -->
+    <button id="copyButton" onclick="copyToClipboard()">Copy Code</button>
+    <button id="rawButton" onclick="redirectToRaw()">View Raw</button>
+    <textarea id="text" onclick="disableZoom(event)"></textarea>
+  </div>
+
+  <script>
+    function disableZoom(event) { event.preventDefault(); }
+
+    const textarea = document.getElementById('text');
+    textarea.addEventListener('input', (event) => { 
+      if (!event.target.value.length || event.target.value.length == 0) return; 
+      const data = { bool: true, text: event.target.value, uri: window.location.pathname };
+      fetch('/save', { method: 'POST', headers: { 'Content-Type': 'application/json', }, body: JSON.stringify(data), }); 
+    });
+
+    function redirectToRaw() { 
+      window.location.href = `/raw${window.location.pathname}`; 
+    }
+
+    function copyToClipboard() { 
+      const textArea = document.getElementById('text');
+      textArea.select();
+      document.execCommand('copy');
+      console.log("Copied"); 
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "Pastebin-clone",
+  "version": "1.2.0",
+  "description": "Simple web application for sharing code or text with real-time updates",
+  "main": "app/index.js",
+  "scripts": {
+    "start": "app/index.js"
+  },
+  "keywords": [
+    "text",
+    "code",
+    "sharing",
+    "pastebin",
+    "savetext",
+    "copy",
+    "paste"
+  ],
+  "author": "Mike Harrison",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^8.7.1"
+  }
+}
