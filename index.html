@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>SaveText Pro</title>
+    <meta name="description" content="A platform for sharing code or text">
+    <style>
+        body, html {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.dark-mode {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        body.light-mode {
+            background-color: #f0f0f0;
+            color: #333333;
+        }
+        .container {
+            max-width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s;
+            box-sizing: border-box;
+            padding: 20px;
+        }
+        .dark-mode .container {
+            background-color: #2c2c2c;
+        }
+        .light-mode .container {
+            background-color: #ffffff;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .controls {
+            display: flex;
+            align-items: center;
+        }
+        .button {
+            background-color: #ff4500;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 5px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        .toggle {
+            width: 50px;
+            height: 28px;
+            background-color: #3a3a3a;
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+        }
+        .toggle-switch {
+            width: 24px;
+            height: 24px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+        }
+        .light-mode .toggle-switch {
+            transform: translateX(22px);
+        }
+        .text-area-container {
+            flex-grow: 1;
+            display: flex;
+        }
+        .text-area {
+            width: 100%;
+            height: 100%;
+            border: 2px solid #87CEEB;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            resize: none;
+            transition: background-color 0.3s, color 0.3s;
+            box-sizing: border-box;
+        }
+        .dark-mode .text-area {
+            background-color: #3a3a3a;
+            color: #8e8e8e;
+        }
+        .light-mode .text-area {
+            background-color: #f5f5f5;
+            color: #333333;
+        }
+        @media (min-width: 768px) {
+            .container {
+                max-width: 920px;
+                height: 93vh;
+                margin: 3.5vh auto;
+                border-radius: 10px;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+            }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="container">
+        <div class="header">
+            <div class="title">SaveText Pro</div>
+            <div class="controls">
+                <button class="button" onclick="copyToClipboard()">Copy</button>
+                <button class="button" onclick="redirectToRaw()">Raw</button>
+                <div class="toggle" onclick="toggleMode()">
+                    <div class="toggle-switch"></div>
+                </div>
+            </div>
+        </div>
+        <div class="text-area-container">
+            <textarea id="text" class="text-area" onclick="disableZoom(event)" placeholder="Start writing..."></textarea>
+        </div>
+    </div>
+    <script>
+        function disableZoom(event) { 
+            event.preventDefault(); 
+        }
+        const textarea = document.getElementById('text');
+        textarea.addEventListener('input', (event) => {
+            if (!event.target.value.length) return;
+            const data = { 
+                bool: true, 
+                text: event.target.value, 
+                uri: window.location.pathname 
+            };
+            fetch('/save', { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' }, 
+                body: JSON.stringify(data), 
+            });
+        });
+        function redirectToRaw() { 
+            window.location.href = '/raw' + window.location.pathname; 
+        }
+        function copyToClipboard() { 
+            const textArea = document.getElementById('text');
+            textArea.select();
+            document.execCommand('copy');
+            console.log("Copied"); 
+        }
+        function toggleMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            body.classList.toggle('light-mode');
+        }
+    </script>
+</body>
+</html>
