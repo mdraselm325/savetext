@@ -4,7 +4,7 @@
   "description": "Simple web application for sharing code or text with real-time updates",
   "main": "app/index.js",
   "scripts": {
-    "start": "app/index.js"
+    "start": "node app/index.js"
   },
   "keywords": [
     "text",
